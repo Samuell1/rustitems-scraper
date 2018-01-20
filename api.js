@@ -1,3 +1,5 @@
+require('dotenv').config()
+
 const Lokka = require('lokka').Lokka
 const Transport = require('lokka-transport-http').Transport
 

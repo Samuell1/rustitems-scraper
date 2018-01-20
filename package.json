@@ -20,6 +20,6 @@
     "dotenv": "^4.0.0",
     "lokka": "^1.7.0",
     "lokka-transport-http": "^1.6.1",
-    "scrape-it": "^3.3.3"
+    "scrape-it": "^4.1.2"
   }
 }
