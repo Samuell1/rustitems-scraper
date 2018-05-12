@@ -58,5 +58,25 @@ export default [
   {
     id: 'cj9k23js7pqed0104lsfi9mf6',
     url: 'https://rustlabs.com/entity/primitive-crate'
+  },
+  {
+    id: 'cje9twjn39lj30197c58jsn0s',
+    url: 'https://rustlabs.com/entity/military-tunnel-scientist'
+  },
+  {
+    id: 'cje9tvwhs9bp801322bmbddbr',
+    url: 'https://rustlabs.com/entity/roaming-scientist'
+  },
+  {
+    id: 'cjfo22a390cbc0104m1pe8b8b',
+    url: 'https://rustlabs.com/entity/ch47-locked-crate'
+  },
+  {
+    id: 'cjh3io05a000v0103svg0ei67',
+    url: 'https://rustlabs.com/entity/sunken-crate'
+  },
+  {
+    id: 'cjh3infet000n0103qzayj1al',
+    url: 'https://rustlabs.com/entity/sunken-chest'
   }
 ]
