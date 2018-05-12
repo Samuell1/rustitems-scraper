@@ -49,7 +49,7 @@ crates.forEach(async (crate) => {
       const page = await scrapeIt.scrapeHTML(body,
         {
           loot: {
-            listItem: ".table.sorting tbody tr",
+            listItem: ".tab-table[data-name=content] .table.sorting tbody tr",
             data: {
               name: 'a',
               dataId: {
