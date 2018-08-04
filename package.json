@@ -6,7 +6,7 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "build": "rimraf dist/ && babel ./ --out-dir dist/ --ignore ./node_modules,./.babelrc,./package.json,./npm-debug.log --copy-files",
-    "start": "npm run build && node dist/index.js"
+    "start": "npm run build && node dist/index.js",
   },
   "keywords": [],
   "author": "",
@@ -17,6 +17,7 @@
     "rimraf": "^2.6.2"
   },
   "dependencies": {
+    "cloudscraper": "^1.5.0",
     "dotenv": "^4.0.0",
     "lokka": "^1.7.0",
     "lokka-transport-http": "^1.6.1",

@@ -78,5 +78,9 @@ export default [
   {
     id: 'cjh3infet000n0103qzayj1al',
     url: 'https://rustlabs.com/entity/sunken-chest'
+  },
+  {
+    id: 'cjik5awcrp8x10197kesz9k73',
+    url: 'https://rustlabs.com/entity/outpost-scientist'
   }
 ]

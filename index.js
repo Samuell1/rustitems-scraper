@@ -2,6 +2,7 @@ require('dotenv').config()
 
 import cloudscraper from 'cloudscraper'
 import scrapeIt from 'scrape-it'
+import fs from 'fs'
 
 import crates from './crates.js'
 import api from './api.js';
@@ -45,6 +46,16 @@ crates.forEach(async (crate) => {
     if (error) {
       console.log('Error occurred');
     } else {
+
+      if (!body) {
+        console.log('('+crate.url+') Site blocked request! Using file as second option.')
+        try {
+          body = await fs.readFileSync(`./html/${crate.url.split('/')[4]}.html`, "utf8")
+        } catch (error) {
+          console.log(`File doesnt exists: ${crate.url.split('/')[4]}.html`)
+          await fs.writeFile(`./html/${crate.url.split('/')[4]}.html`, '')
+        }
+      }
 
       const page = await scrapeIt.scrapeHTML(body,
         {
