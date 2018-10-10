@@ -5,7 +5,7 @@ export default [
   },
   {
     id: 'cj8g3bic84oi90107504aeo7n',
-    url: 'https://rustlabs.com/entity/elite-crate'
+    url: 'https://rustlabs.com/entity/elite-tier-crate'
   },
   {
     id: 'cj8g3bcjb4oi501075djwc1ak',
@@ -69,7 +69,7 @@ export default [
   },
   {
     id: 'cjfo22a390cbc0104m1pe8b8b',
-    url: 'https://rustlabs.com/entity/ch47-locked-crate'
+    url: 'https://rustlabs.com/entity/hackable-crate'
   },
   {
     id: 'cjh3io05a000v0103svg0ei67',
