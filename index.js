@@ -1,13 +1,13 @@
 require('dotenv').config()
 
-import cloudscraper from 'cloudscraper'
+import puppeteer from 'puppeteer'
 import scrapeIt from 'scrape-it'
 import fs from 'fs'
 
 import crates from './crates.js'
 import api from './api.js';
 
-const mutate = false
+const mutate = true
 
 const createLoot = `($dataId: String!, $name: String, $percentage: Float, $blueprint: Boolean, $crateId: ID, $amount: String) {
   newData: createLoot(dataId: $dataId, name: $name, percentage: $percentage, blueprint: $blueprint, crateId: $crateId, amount: $amount) {
@@ -41,59 +41,52 @@ if (mutate) {
 console.log('\x1b[33m%s\x1b[0m', '### Added new changelog: ' + new Date())
 
 // Recreate all loottables
-crates.forEach(async (crate) => {
-  await cloudscraper.get(crate.url, async (error, response, body) => {
-    if (error) {
-      console.log('Error occurred');
-    } else {
+puppeteer.launch().then(async browser => {
 
-      if (!body) {
-        console.log('('+crate.url+') Site blocked request! Using file as second option.')
-        try {
-          body = await fs.readFileSync(`./html/${crate.url.split('/')[4]}.html`, "utf8")
-        } catch (error) {
-          console.log(`File doesnt exists: ${crate.url.split('/')[4]}.html`)
-          await fs.writeFile(`./html/${crate.url.split('/')[4]}.html`, '')
-        }
-      }
+  await crates.forEach(async (crate) => {
+    const page = await browser.newPage()
+    await page.goto(crate.url)
+    const html = await page.content()
 
-      const page = await scrapeIt.scrapeHTML(body,
-        {
-          loot: {
-            listItem: ".tab-table[data-name=content] .table.sorting tbody tr",
-            data: {
-              name: 'a',
-              dataId: {
-                selector: 'img',
-                attr: 'src',
-                convert: (value) => value && value.replace(/\/\/rustlabs.com\/img\/items40\/|.png|.jpg/gi, '')
-              },
-              blueprint: {
-                selector: 'a',
-                convert: (value) => value.includes('Blueprint')
-              },
-              amount: {
-                selector: '.text-in-icon'
-                // convert: (value) => value.replace(/ml|×/gi, '') - remove ml and ×
-              },
-              percentage: {
-                selector: 'td:nth-child(5)',
-                convert: (value) => Number(value.replace(' %', ''))
-              }
+    const scrapeHTML = await scrapeIt.scrapeHTML(html,
+      {
+        loot: {
+          listItem: ".tab-table[data-name=content] .table.sorting tbody tr",
+          data: {
+            name: 'a',
+            dataId: {
+              selector: 'img',
+              attr: 'src',
+              convert: (value) => value && value.replace(/\/\/rustlabs.com\/img\/items40\/|.png|.jpg/gi, '')
+            },
+            blueprint: {
+              selector: 'a',
+              convert: (value) => value.includes('Blueprint')
+            },
+            amount: {
+              selector: '.text-in-icon'
+              // convert: (value) => value.replace(/ml|×/gi, '') - remove ml and ×
+            },
+            percentage: {
+              selector: 'td:nth-child(5)',
+              convert: (value) => Number(value.replace(' %', ''))
             }
           }
         }
-        )
-        console.log('\x1b[46m%s\x1b[0m', crate.url + ' loot founded: ' + page.loot.length)
-      
-        page.loot.forEach(async (vars, index) => {
-          setTimeout(async () => {
-            vars.crateId = crate.id
-            if (mutate) await api.mutate(createLoot, vars)
-      
-            console.log('\x1b[32m%s\x1b[0m', crate.url + ' -> '+ vars.name + ' - ADDED')
-          }, 100*(index+1)) // limit requests per sec
-        })
-    }
-  });
+      }
+      )
+    console.log('\x1b[46m%s\x1b[0m', crate.url + ' loot founded: ' + scrapeHTML.loot.length)
+  
+    scrapeHTML.loot.forEach(async (vars, index) => {
+      setTimeout(async () => {
+        vars.crateId = crate.id
+        if (mutate) await api.mutate(createLoot, vars)
+  
+        console.log('\x1b[32m%s\x1b[0m', crate.url + ' -> '+ vars.name + ' - ADDED')
+      }, 100*(index+1)) // limit requests per sec
+    })
+
+    await page.close()
+  })
+  // await browser.close()
 })
