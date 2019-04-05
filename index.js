@@ -2,7 +2,6 @@ require('dotenv').config()
 
 import puppeteer from 'puppeteer'
 import scrapeIt from 'scrape-it'
-import fs from 'fs'
 
 import crates from './crates.js'
 import api from './api.js';

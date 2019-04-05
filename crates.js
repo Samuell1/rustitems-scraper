@@ -33,7 +33,7 @@ export default [
   },
   {
     id: 'cj8g3c9ph4m2x0120jdk2rm4d',
-    url: 'https://rustlabs.com/entity/tool-crate'
+    url: 'https://rustlabs.com/entity/tool-box'
   },
   {
     id: 'cj8g3csl34oj30107accililh',
@@ -82,5 +82,13 @@ export default [
   {
     id: 'cjik5awcrp8x10197kesz9k73',
     url: 'https://rustlabs.com/entity/outpost-scientist'
+  },
+  {
+    id: 'cju4c40i5hdbi0167ke4s4mzt',
+    url: 'https://rustlabs.com/entity/oil-rig-scientist'
+  },
+  {
+    id: 'cju4c15gohdal01672e2h91lv',
+    url: 'https://rustlabs.com/entity/heavy-scientist'
   }
 ]
