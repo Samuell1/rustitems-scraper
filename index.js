@@ -8,8 +8,8 @@ import api from './api.js';
 
 const mutate = true
 
-const createLoot = `($dataId: String!, $name: String, $percentage: Float, $blueprint: Boolean, $crateId: ID, $amount: String) {
-  newData: createLoot(dataId: $dataId, name: $name, percentage: $percentage, blueprint: $blueprint, crateId: $crateId, amount: $amount) {
+const createLoot = `($dataId: String!, $name: String, $percentage: Float, $blueprint: Boolean, $crateId: ID, $amount: String, $category: String!) {
+  newData: createLoot(dataId: $dataId, name: $name, percentage: $percentage, blueprint: $blueprint, crateId: $crateId, amount: $amount, category: { name: $category }) {
     id
     blueprint
     crate {
@@ -18,6 +18,10 @@ const createLoot = `($dataId: String!, $name: String, $percentage: Float, $bluep
     dataId
     name
     percentage
+    category {
+      id
+      name
+    }
   }
 }
 `;
@@ -65,6 +69,13 @@ puppeteer.launch().then(async browser => {
             amount: {
               selector: '.text-in-icon'
               // convert: (value) => value.replace(/ml|×/gi, '') - remove ml and ×
+            },
+            condition: {
+              selector: 'td:nth-child(3)',
+              convert: (value) => value.replace('NaN', '')
+            },
+            category: {
+              selector: 'td:nth-child(4)',
             },
             percentage: {
               selector: 'td:nth-child(5)',
