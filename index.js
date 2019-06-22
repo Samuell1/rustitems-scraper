@@ -3,7 +3,7 @@ require('dotenv').config()
 import puppeteer from 'puppeteer'
 import scrapeIt from 'scrape-it'
 
-import crates from './crates.js'
+import cratesJson from './crates.js'
 import api from './api.js';
 
 const mutate = true
@@ -42,6 +42,11 @@ if (mutate) {
   })
 }
 console.log('\x1b[33m%s\x1b[0m', '### Added new changelog: ' + new Date())
+
+let crates = cratesJson
+if (!mutate) {
+  crates = crates.filter((item, index) => index === 0)
+}
 
 // Recreate all loottables
 puppeteer.launch().then(async browser => {

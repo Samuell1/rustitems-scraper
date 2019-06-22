@@ -69,7 +69,7 @@ export default [
   },
   {
     id: 'cjfo22a390cbc0104m1pe8b8b',
-    url: 'https://rustlabs.com/entity/hackable-crate'
+    url: 'https://rustlabs.com/entity/locked-crate'
   },
   {
     id: 'cjh3io05a000v0103svg0ei67',
