@@ -8,8 +8,8 @@ import api from './api.js';
 
 const mutate = true
 
-const createLoot = `($dataId: String!, $name: String, $percentage: Float, $blueprint: Boolean, $crateId: ID, $amount: String, $categoryId: ID) {
-  newData: createLoot(dataId: $dataId, name: $name, percentage: $percentage, blueprint: $blueprint, crateId: $crateId, amount: $amount, categoryId: $categoryId) {
+const createLoot = `($dataId: String!, $name: String, $percentage: Float, $blueprint: Boolean, $crateId: ID, $amount: String, $condition: String, $categoryId: ID) {
+  newData: createLoot(dataId: $dataId, name: $name, percentage: $percentage, blueprint: $blueprint, crateId: $crateId, amount: $amount, condition: $condition, categoryId: $categoryId) {
     id
     blueprint
     crate {
