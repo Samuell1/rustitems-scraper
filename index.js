@@ -8,8 +8,8 @@ import api from './api.js';
 
 const mutate = true
 
-const createLoot = `($dataId: String!, $name: String, $percentage: Float, $blueprint: Boolean, $crateId: ID, $amount: String, $category: String!) {
-  newData: createLoot(dataId: $dataId, name: $name, percentage: $percentage, blueprint: $blueprint, crateId: $crateId, amount: $amount, category: { name: $category }) {
+const createLoot = `($dataId: String!, $name: String, $percentage: Float, $blueprint: Boolean, $crateId: ID, $amount: String, $categoryId: ID) {
+  newData: createLoot(dataId: $dataId, name: $name, percentage: $percentage, blueprint: $blueprint, crateId: $crateId, amount: $amount, categoryId: $categoryId) {
     id
     blueprint
     crate {
@@ -20,7 +20,6 @@ const createLoot = `($dataId: String!, $name: String, $percentage: Float, $bluep
     percentage
     category {
       id
-      name
     }
   }
 }
@@ -45,11 +44,26 @@ console.log('\x1b[33m%s\x1b[0m', '### Added new changelog: ' + new Date())
 
 let crates = cratesJson
 if (!mutate) {
+  // test only first crate 
   crates = crates.filter((item, index) => index === 0)
 }
 
+let categories 
+
 // Recreate all loottables
 puppeteer.launch().then(async browser => {
+
+  // fetch all available categories
+  const getCategories = await api.query(`
+  {
+    allCategories {
+      id
+      name
+    }
+  }
+  `)
+  categories = getCategories.allCategories
+
 
   await crates.forEach(async (crate) => {
     const page = await browser.newPage()
@@ -94,7 +108,12 @@ puppeteer.launch().then(async browser => {
   
     scrapeHTML.loot.forEach(async (vars, index) => {
       setTimeout(async () => {
+
         vars.crateId = crate.id
+        vars.categoryId = getCategoryId(vars.category)
+        delete vars.category;
+
+        console.log(vars)
         if (mutate) await api.mutate(createLoot, vars)
   
         console.log('\x1b[32m%s\x1b[0m', crate.url + ' -> '+ vars.name + ' - ADDED')
@@ -105,3 +124,7 @@ puppeteer.launch().then(async browser => {
   })
   // await browser.close()
 })
+
+function getCategoryId (name) {
+  return categories.find((item) => item.name === name).id || null
+}
