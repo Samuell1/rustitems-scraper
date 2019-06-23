@@ -111,9 +111,7 @@ puppeteer.launch().then(async browser => {
 
         vars.crateId = crate.id
         vars.categoryId = getCategoryId(vars.category)
-        delete vars.category;
-
-        console.log(vars)
+        delete vars.category
         if (mutate) await api.mutate(createLoot, vars)
   
         console.log('\x1b[32m%s\x1b[0m', crate.url + ' -> '+ vars.name + ' - ADDED')
