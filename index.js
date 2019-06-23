@@ -91,7 +91,10 @@ puppeteer.launch().then(async browser => {
             },
             condition: {
               selector: 'td:nth-child(3)',
-              convert: (value) => value.replace('NaN', '')
+              convert: (value) => {
+                value = value.replace(' %', '')
+                return value !== '-' ? value : null
+              }
             },
             category: {
               selector: 'td:nth-child(4)',
