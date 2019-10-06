@@ -118,7 +118,7 @@ puppeteer.launch().then(async browser => {
         if (mutate) await api.mutate(createLoot, vars)
   
         console.log('\x1b[32m%s\x1b[0m', crate.url + ' -> '+ vars.name + ' - ADDED')
-      }, 100*(index+1)) // limit requests per sec
+      }, 150*(index+1)) // limit requests per sec
     })
 
     await page.close()
@@ -127,5 +127,6 @@ puppeteer.launch().then(async browser => {
 })
 
 function getCategoryId (name) {
-  return categories.find((item) => item.name === name).id || null
+  var category = categories.find((item) => item.name === name)
+  return category ? category.id : null
 }
