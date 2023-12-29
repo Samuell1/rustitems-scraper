@@ -2,3 +2,6 @@
 /dist
 /node_modules
 /html
+/crates
+/items
+/crates.json

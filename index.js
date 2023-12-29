@@ -34,6 +34,11 @@ puppeteer.launch().then(async browser => {
 
     const scrapeHTML = await scrapeIt.scrapeHTML(html,
       {
+        crateImage: {
+          selector: "img[id=\"screenshot\"]",
+          attr: "src",
+          convert: (value) => value.replace('//rustlabs.com/img/screenshots/', '')
+        },
         loot: {
           listItem: ".tab-table[data-name=content] .table tbody tr",
           data: {
@@ -71,6 +76,29 @@ puppeteer.launch().then(async browser => {
       )
     console.log('\x1b[46m%s\x1b[0m', crate.url + ' loot founded: ' + scrapeHTML.loot.length)
 
+    // Save image of crate
+    const crateImagePage = await browser.newPage();
+    const crateImagefileDL = await crateImagePage.goto(`https://rustlabs.com/img/screenshots/${scrapeHTML.crateImage}`)
+    const slugName = crate.name.toLowerCase().replace(/ /g, '-')
+    const crateImagePath = `./crates/${slugName}.png`
+    if (!fs.existsSync(crateImagePath)) {
+      await fs.writeFile(crateImagePath, await crateImagefileDL.buffer(), function (err) {
+        if (err) throw err
+      })
+    }
+
+    // Save images of loot
+    scrapeHTML.loot.forEach(async (item) => {
+      const imagePage = await browser.newPage();
+      const imagefileDL = await imagePage.goto(`https://rustlabs.com/img/items40/${item.image}`)
+      const imagePath = `./items/${item.image}`
+      if (!fs.existsSync(imagePath)) {
+        await fs.writeFile(imagePath, await imagefileDL.buffer(), function (err) {
+          if (err) throw err
+        })
+      }
+    })
+
     cratesData.push({
       name: crate.name,
       url: crate.url,
@@ -82,7 +110,7 @@ puppeteer.launch().then(async browser => {
 
   await fs.writeFile('crates.json', JSON.stringify(cratesData), function (err) {
     if (err) throw err
-    console.log('Saved!')
+    console.log('Crates Saved!')
   })
 
   // await browser.close()
